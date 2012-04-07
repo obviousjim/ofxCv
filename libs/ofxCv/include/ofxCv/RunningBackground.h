@@ -36,7 +36,7 @@
 namespace ofxCv {
 	class RunningBackground {
 	public:
-		enum DifferenceMode {ABSOLUTE, BRIGHTER, DARKER};
+		enum DifferenceMode {CV_ABSOLUTE, CV_BRIGHTER, CV_DARKER};
 				
 		RunningBackground();
 		template <class F, class T> 

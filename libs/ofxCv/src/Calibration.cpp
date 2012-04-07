@@ -114,7 +114,6 @@ namespace ofxCv {
 		}
 		
 		addedImageSize = imageSize;
-		
 		distortedIntrinsics.setup(cameraMatrix, imageSize, sensorSize);
 		updateUndistortion();
 	}

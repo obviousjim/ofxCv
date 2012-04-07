@@ -1,6 +1,9 @@
 #include "ofxCv/Utilities.h"
 
 #include "ofMath.h"
+#ifdef TARGET_WIN32
+#include <stdint.h>
+#endif
 
 namespace ofxCv {
 	
