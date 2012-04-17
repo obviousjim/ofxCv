@@ -32,10 +32,10 @@ namespace ofxCv {
 		}
 		double* rm = rot3x3.ptr<double>(0);
 		double* tm = translation.ptr<double>(0);
-		return ofMatrix4x4(rm[0], rm[3], rm[6], 0.0f,
-											 rm[1], rm[4], rm[7], 0.0f,
-											 rm[2], rm[5], rm[8], 0.0f,
-											 tm[0], tm[1], tm[2], 1.0f);
+		return ofMatrix4x4( rm[0], -rm[3], -rm[6], 0.0f,
+                            rm[1], -rm[4], -rm[7], 0.0f,
+                            rm[2], -rm[5], -rm[8], 0.0f,
+                            tm[0], -tm[1], -tm[2], 1.0f);
 	}
 	
 	void drawMat(Mat& mat, float x, float y) {
