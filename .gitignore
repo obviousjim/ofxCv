@@ -1,9 +1,17 @@
+example-pulse/
+
 *.depend
 *.layout
 *.mode*v3
 *.pbxuser
 *.app*
 *.DS_*
+*.xcworkspacedata
+
+*.opensdf
+*.sdf
+*.suo
+*.ipch
 
 .svn/
 obj/

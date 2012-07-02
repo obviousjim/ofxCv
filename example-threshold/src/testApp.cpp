@@ -12,8 +12,12 @@ void testApp::update() {
 	cam.update();
 	if(cam.isFrameNew()) {
 		convertColor(cam, thresh, CV_RGB2GRAY);
-		float thresholdValue = ofMap(mouseX, 0, ofGetWidth(), 0, 255);
-		threshold(thresh, thresholdValue);
+		if(ofGetMousePressed()) {
+			autothreshold(thresh);
+		} else {
+			float thresholdValue = ofMap(mouseX, 0, ofGetWidth(), 0, 255);
+			threshold(thresh, thresholdValue);
+		}
 		thresh.update();
 	}
 }

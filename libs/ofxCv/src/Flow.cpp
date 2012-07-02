@@ -1,17 +1,9 @@
-/*
- *  Flow.cpp
- *  FlowExample
- *
- *  Created by James George on 12/20/11.
- *
- */
-
-#include "Flow.h"
+#include "ofxCv/Flow.h"
 
 namespace ofxCv {
 	
 	using namespace cv;
-
+	
 #pragma mark FLOW IMPLEMENTATION
 	Flow::Flow(){
 		hasFlow = false;
@@ -21,12 +13,12 @@ namespace ofxCv {
 	
 	Flow::~Flow(){
 	}
-
+	
 	//call with two images
 	void Flow::calcOpticalFlow(ofBaseHasPixels& lastImage, ofBaseHasPixels& currentImage){
 		calcOpticalFlow(lastImage.getPixelsRef(), currentImage.getPixelsRef());
 	}
-
+	
 	void Flow::calcOpticalFlow(ofPixelsRef lastImage, ofPixelsRef currentImage){
 		last.setFromPixels(lastImage);
 		last.setImageType(OF_IMAGE_GRAYSCALE); //force to gray
@@ -43,7 +35,7 @@ namespace ofxCv {
 	void Flow::calcOpticalFlow(ofBaseHasPixels& nextImage){
 		calcOpticalFlow(nextImage.getPixelsRef());
 	}
-
+	
 	void Flow::calcOpticalFlow(ofPixelsRef nextImage){
 		curr.setFromPixels(nextImage);
 		curr.setImageType(OF_IMAGE_GRAYSCALE);
@@ -52,7 +44,7 @@ namespace ofxCv {
 			calcFlow(); //will call concrete implementation
 			hasFlow = true;
 		}
-
+		
 		last.setFromPixels(curr.getPixelsRef());
 	}
 	
@@ -76,6 +68,9 @@ namespace ofxCv {
 			drawFlow(rect);
 		}
 	}
+    int Flow::getWidth()  { return 0; }
+    int Flow::getHeight() { return 0; }
+    
 	
 #pragma mark PYRLK IMPLEMENTATION
 	FlowPyrLK::FlowPyrLK(){
@@ -83,7 +78,7 @@ namespace ofxCv {
 	
 	FlowPyrLK::~FlowPyrLK(){
 	}
-
+	
 	void FlowPyrLK::setWindowSize(int winsize){
 		this->windowSize = winsize;
 	}
@@ -99,32 +94,39 @@ namespace ofxCv {
 	void FlowPyrLK::setMinDistance(int minDistance){
 		this->minDistance = minDistance;
 	}
-					 
+	
 	void FlowPyrLK::calcFlow(){
 		prevPts.clear();
 		goodFeaturesToTrack(
-							toCv(last),
-							prevPts,
-							maxFeatures,
-							qualityLevel,
-							minDistance
-						);
+												toCv(last),
+												prevPts,
+												maxFeatures,
+												qualityLevel,
+												minDistance
+												);
 		
 		vector<uchar> status;
 		vector<float> err;
 		calcOpticalFlowPyrLK(
-							 toCv(last),
-							 toCv(curr),
-							 prevPts,
-							 nextPts,
-							 status,
-							 err,
-							 
-							 cv::Size(windowSize, windowSize),
-							 maxLevel
-						);
+												 toCv(last),
+												 toCv(curr),
+												 prevPts,
+												 nextPts,
+												 status,
+												 err,
+												 
+												 cv::Size(windowSize, windowSize),
+												 maxLevel
+												 );
 	}
-
+	
+    int FlowPyrLK::getWidth() {
+        return last.getWidth();
+    }
+    int FlowPyrLK::getHeight() {
+        return last.getHeight();
+    }
+    
 	vector<ofPoint> FlowPyrLK::getFeatures(){
 		return toOf(prevPts).getVertices();
 	}
@@ -143,7 +145,7 @@ namespace ofxCv {
 	
 	FlowFarneback::~FlowFarneback(){
 	}
-
+	
 	void FlowFarneback::setPyramidScale(float scale){
 		if(scale < 0.0 || scale > 1.0){
 			ofLogWarning("ofxCvFlowFarneback -- Warning setting scale to a number outside of 0 - 1");
@@ -169,26 +171,26 @@ namespace ofxCv {
 	void FlowFarneback::setUseGaussian(bool gaussian){
 		this->farnebackGaussian = gaussian;
 	}
-
+	
 	void FlowFarneback::calcFlow(){
 		int flags = OPTFLOW_USE_INITIAL_FLOW;
 		flags |= farnebackGaussian ? OPTFLOW_FARNEBACK_GAUSSIAN : 0;
 		
 		calcOpticalFlowFarneback(
-								 toCv(last),
-								 toCv(curr),
-								 flow,
-								 
-								 pyramidScale,
-								 numLevels,
-								 windowSize,
-								 numIterations,
-								 polyN,
-								 polySigma,
-								 flags
-								);
+														 toCv(last),
+														 toCv(curr),
+														 flow,
+														 
+														 pyramidScale,
+														 numLevels,
+														 windowSize,
+														 numIterations,
+														 polyN,
+														 polySigma,
+														 flags
+														 );
 	}
-
+	
 	ofVec2f FlowFarneback::getFlowOffset(int x, int y){
 		const Vec2f& vec = flow.at<Vec2f>(y, x);
 		return ofVec2f(vec[0], vec[1]);
@@ -203,7 +205,7 @@ namespace ofxCv {
 	ofVec2f FlowFarneback::getAverageFlow(){
 		return getAverageFlowInRegion(ofRectangle(0,0,flow.cols,flow.rows));
 	}
-
+	
 	ofVec2f FlowFarneback::getAverageFlowInRegion(ofRectangle rect){
 		return getTotalFlowInRegion(rect)/(rect.width*rect.height);
 	}
@@ -212,7 +214,14 @@ namespace ofxCv {
 		const Scalar& sc = sum(flow(toCv(region)));
 		return ofVec2f(sc[1], sc[0]);
 	}
-
+	
+    int FlowFarneback::getWidth() {
+        return flow.cols;
+    }
+    int FlowFarneback::getHeight() {
+        return flow.rows;
+    }
+    
 	void FlowFarneback::drawFlow(ofRectangle rect){
 		ofVec2f offset(rect.x,rect.y);
 		ofVec2f scale(rect.width/flow.cols, rect.height/flow.rows);
@@ -225,4 +234,3 @@ namespace ofxCv {
 		}
 	}
 }
-

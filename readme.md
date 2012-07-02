@@ -24,19 +24,21 @@ Provide clean implementations of all functions in order to provide a stepping st
 
 # Usage
 
-Notes on using ofxCv with your project.
+Sometimes this readme will fall out of date. Please refer to the examples as the primary reference in that case.
 
 ## Project setup
 
 Using ofxCv requires:
 
-* ofxCv/src/ The core of ofxCv.
+* ofxCv/libs/ofxCv/include/ Which contains all the ofxCv headers.
+* ofxCv/libs/ofxCv/src/ Which contains all the ofxCv source.
+* ofxCv/src/ Which ties together all of ofxCv into a single include.
 * opencv/include/ The OpenCv headers, located in addons/ofxOpenCv/
 * opencv/lib/ The precompiled static OpenCv libraries, located in addons/ofxOpenCv/
 
 Your linker will also need to know where the OpenCv headers are. In XCode this means modifying one line in Project.xconfig:
 
-	HEADER_SEARCH_PATHS = $(OF_CORE_HEADERS) "../../../addons/ofxOpenCv/libs/opencv/include/"
+	HEADER_SEARCH_PATHS = $(OF_CORE_HEADERS) "../../../addons/ofxOpenCv/libs/opencv/include/" "../../../addons/ofxCv/libs/ofxCv/include/"
 
 ## Including ofxCv
 
@@ -44,14 +46,14 @@ Inside your testApp.h you will need one include:
 
 	#include "ofxCv.h"
 
-OpenCv uses the `cv` namespace, and ofxCv uses the `ofxCv` namespace. The example code does not mention these namespaces because `ofxCv.h` automatically imports them for you:
+OpenCv uses the `cv` namespace, and ofxCv uses the `ofxCv` namespace. You can automatically import them by writing this in your `.cpp` files:
 
 	using namespace cv;
 	using namespace ofxCv;
 
-But if you look inside the ofxCv source, you'll find lots of cases of `ofxCv::` and `cv::`. In some rare cases, you'll need to write `cv::` in your code. For example, on OSX `Rect` and `Point` are defined by OpenCv, but also `MacTypes.h`. So if you're using an OpenCv `Rect` or `Point` you'll need to say so explicitly with `cv::Rect` or `cv::Point`.
+If you look inside the ofxCv source, you'll find lots of cases of `ofxCv::` and `cv::`. In some rare cases, you'll need to write `cv::` in your code. For example, on OSX `Rect` and `Point` are defined by OpenCv, but also `MacTypes.h`. So if you're using an OpenCv `Rect` or `Point` you'll need to say so explicitly with `cv::Rect` or `cv::Point` to disambiguate.
 
-ofxCv takes advantage of namespaces by using overloaded function names. This means that the ofxCv wrapper for `cv::Canny()` is also called `ofxCv::Canny()`. When you write `Canny()`, the correct function will be chosen based on the arguments you pass.
+ofxCv takes advantage of namespaces by using overloaded function names. This means that the ofxCv wrapper for `cv::Canny()` is also called `ofxCv::Canny()`. If you write simply `Canny()`, the correct function will be chosen based on the arguments you pass.
 
 ## Working with ofxCv
 
@@ -133,6 +135,16 @@ A matrix operation looks similar:
 This will add every element of `a` and `b`, then multiply the results by 10, and finally assign the result to `x`.
 
 Available matrix expressions include mathematical operators `+`, `-`, `/` (per element division), `*` (matrix multiplication), `.mul()` (per-element multiplication). As well as comparison operators `!=`, `==`, `<`, `>`, `>=`, `<=` (useful for thresholding). Binary operators `&`, `|`, `^`, `~`. And a few others like `abs()`, `min()`, and `max()`. For the complete listing see the OpenCv documention or `mat.hpp`.
+
+# Code Style
+
+ofxCv tries to have a consistent code style. It's most similar to the K&R variant used for Java, and the indentation is primarily determined by XCode's auto-indent feature.
+
+Multiline comments are used for anything beyond two lines.
+
+Case statements have a `default:` fall-through with the last case.
+
+When two or three similar variables are initialized, commas are used instead of multiple lines. For example `Mat srcMat = toCv(src), dstMat = toCv(dst);`. This style was inherited from reading Jason Saragih's FaceTracker.
 
 - - --
 
