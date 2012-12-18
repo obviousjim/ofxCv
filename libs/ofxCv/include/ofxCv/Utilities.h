@@ -154,10 +154,12 @@ namespace ofxCv {
 	}
 	Mat toCv(ofBaseHasPixels& img);
 	Mat toCv(ofMesh& mesh);
+	Mat toCv(vector<ofVec3f>& vertices);
 	Point2f toCv(ofVec2f vec);
 	Point3f toCv(ofVec3f vec);
 	cv::Rect toCv(ofRectangle rect);
 	vector<cv::Point2f> toCv(const ofPolyline& polyline);
+	vector<cv::Point2f> toCv(const vector<ofVec2f>& points);
 	Scalar toCv(ofColor color); // might need more for other color types?
 	
 	// toOf functions
