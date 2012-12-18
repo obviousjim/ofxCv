@@ -32,6 +32,7 @@ namespace ofxCv {
 	}
 	Mat toCv(ofBaseHasPixels& img);
 	Mat toCv(ofMesh& mesh);
+	Mat toCv(vector<ofVec3f>& vertices);
 	Point2f toCv(ofVec2f vec);
 	Point3f toCv(ofVec3f vec);
 	cv::Rect toCv(ofRectangle rect);

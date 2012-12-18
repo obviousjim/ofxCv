@@ -31,6 +31,10 @@ namespace ofxCv {
 		return Mat(1, vertices.size(), CV_32FC3, &vertices[0]);
 	}
 	
+	Mat toCv(vector<ofVec3f>& vertices) {
+		return Mat(1, vertices.size(), CV_32FC3, &vertices[0]);
+	}
+
 	vector<cv::Point2f> toCv(const ofPolyline& polyline) {
 		vector<cv::Point2f> contour(polyline.size());
 		for(int i = 0; i < polyline.size(); i++) {
@@ -39,7 +43,7 @@ namespace ofxCv {
 		}
 		return contour;		
 	}
-	
+
 	Scalar toCv(ofColor color) {
 		return Scalar(color.r, color.g, color.b, color.a);
 	}
