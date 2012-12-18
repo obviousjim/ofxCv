@@ -127,10 +127,10 @@ cv::name(xMat, yMat, resultMat);\
 	}
 	
 	// in-place Gaussian blur
-	template <class SD>
-	void blur(SD& srcDst, int size) {
-		ofxCv::blur(srcDst, srcDst, size);
-	}
+
+//	void blur(SD& srcDst, int size) {
+//		ofxCv::blur(srcDst, srcDst, size);
+//	}
 	
 	// Median blur
 	template <class S, class D>

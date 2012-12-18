@@ -64,8 +64,11 @@ namespace ofxCv {
 		bool clean(float minReprojectionError = 2.f);
 		bool calibrate();
 		bool calibrateFromDirectory(string directory);
+
 		bool findBoard(Mat img, vector<Point2f> &pointBuf, bool refine = true);
-										  
+		void setIntrinsics(Intrinsics& distortedIntrinsics, Mat& distortionCoefficients); //must be set up
+        
+
 		void undistort(Mat img, int interpolationMode = INTER_NEAREST);
 		void undistort(Mat src, Mat dst, int interpolationMode = INTER_NEAREST);
 		
@@ -76,7 +79,8 @@ namespace ofxCv {
 		
 		float getReprojectionError() const;
 		float getReprojectionError(int i) const;
-		
+
+        
 		const Intrinsics& getDistortedIntrinsics() const;
 		const Intrinsics& getUndistortedIntrinsics() const;
 		Mat getDistCoeffs() const;
@@ -104,7 +108,8 @@ namespace ofxCv {
 		Mat grayMat;
 		
 		Mat distCoeffs;
-		
+
+        
 		vector<Mat> boardRotations, boardTranslations;
 		vector<vector<Point3f> > objectPoints;
 		
