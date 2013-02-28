@@ -1,6 +1,9 @@
 #include "ofxCv/Utilities.h"
 
 #include "ofMath.h"
+#ifdef TARGET_WIN32
+#include <stdint.h>
+#endif
 
 // vs2010 support (this should be added to the OF core)
 #if (_MSC_VER)
