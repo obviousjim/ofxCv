@@ -81,7 +81,14 @@ namespace ofxCv {
 		ready(false) {
 		
 	}
-	
+	void Calibration::reset(){
+		ready = false;
+		reprojectionError = 0.0;
+		imagePoints.clear();
+		objectPoints.clear();
+		perViewErrors.clear();
+		
+	}
 	void Calibration::save(string filename, bool absolute) const {
 		if(!ready){
 			ofLog(OF_LOG_ERROR, "Calibration::save() failed, because your calibration isn't ready yet!");
@@ -125,6 +132,7 @@ namespace ofxCv {
 		addedImageSize = imageSize;
 		distortedIntrinsics.setup(cameraMatrix, imageSize, sensorSize);
 		updateUndistortion();
+		this->ready = true;
 	}
 	void Calibration::setIntrinsics(Intrinsics& distortedIntrinsics, Mat& distortionCoefficients){
 		this->distortedIntrinsics = distortedIntrinsics;
