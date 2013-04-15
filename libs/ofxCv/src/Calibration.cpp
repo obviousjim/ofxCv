@@ -125,6 +125,14 @@ namespace ofxCv {
 		addedImageSize = imageSize;
 		distortedIntrinsics.setup(cameraMatrix, imageSize, sensorSize);
 		updateUndistortion();
+		this->ready = true;
+	}
+	void Calibration::reset(){
+		this->ready = false;
+		this->reprojectionError = 0.0;
+		this->imagePoints.clear();
+		this->objectPoints.clear();
+		this->perViewErrors.clear();
 	}
 	void Calibration::setIntrinsics(Intrinsics& distortedIntrinsics, Mat& distortionCoefficients){
 		this->distortedIntrinsics = distortedIntrinsics;
