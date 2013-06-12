@@ -6,6 +6,7 @@
  
  high level image operations:
  - Canny (edge detection), medianBlur, blur (gaussian), convertColor
+ - Coherent line drawing
  
  low level image manipulation and comparison:
  - threshold, normalize, invert, lerp
@@ -29,12 +30,19 @@
 #include "opencv2/opencv.hpp"
 #include "ofxCv/Utilities.h"
 
+// coherent line drawing
+#include "imatrix.h"
+#include "ETF.h"
+#include "fdog.h"
+#include "myvec.h"
+
 namespace ofxCv {
 	
 	using namespace cv;
 	
 	void loadMat(Mat& mat, string filename);
 	void saveMat(Mat mat, string filename);
+	void saveImage(Mat& mat, string filename);
 	
 	// wrapThree are based on functions that operate on three Mat objects.
 	// the first two are inputs, and the third is an output. for example,
@@ -212,7 +220,40 @@ cv::name(xMat, yMat, resultMat);\
 		imitate(dst, src, CV_8UC1);
 		Mat srcMat = toCv(src), dstMat = toCv(dst);
 		cv::Canny(srcMat, dstMat, threshold1, threshold2, apertureSize, L2gradient);
-	}	
+	}
+	
+	// coherent line drawing: good values for halfw are between 1 and 8,
+	// smoothPasses 1, and 4, sigma1 between .01 and 2, sigma2 between .01 and 10,
+	// tau between .8 and 1.0
+	// this could be rewritten into a class so we're not doing an allocate and copy each time
+	template <class S, class D>
+	void CLD(S& src, D& dst, int halfw = 4, int smoothPasses = 2, double sigma1 = .4, double sigma2 = 3, double tau = .97, int black = 0) {
+		copy(src, dst);
+		int width = getWidth(src), height = getHeight(src);
+		imatrix img;
+		img.init(height, width);
+		Mat dstMat = toCv(dst);
+		if(black != 0) {
+			add(dstMat, cv::Scalar(black), dstMat);
+		}
+		// copy from dst (unsigned char) to img (int)
+		for(int y = 0; y < height; y++) {
+			for(int x = 0; x < width; x++) {
+				img[y][x] = dstMat.at<unsigned char>(y, x);
+			}
+		}
+		ETF etf;
+		etf.init(height, width);
+		etf.set(img);
+		etf.Smooth(halfw, smoothPasses);
+		GetFDoG(img, etf, sigma1, sigma2, tau);
+		// copy result from img (int) to dst (unsigned char)
+		for(int y = 0; y < height; y++) {
+			for(int x = 0; x < width; x++) {
+				dstMat.at<unsigned char>(y, x) = img[y][x];
+			}
+		}
+	}
 	
 	// dst does not imitate src
 	template <class S, class D>
@@ -259,13 +300,18 @@ cv::name(xMat, yMat, resultMat);\
 	
 	template <class S, class D>
 	void resize(S& src, D& dst, float xScale, float yScale, int interpolation = INTER_LINEAR) { // also: INTER_NEAREST, INTER_AREA, INTER_CUBIC, INTER_LANCZOS4
-		allocate(dst, getWidth(src) * xScale, getHeight(src) * yScale, getCvImageType(src));
+		int dstWidth = getWidth(src) * xScale, dstHeight = getHeight(src) * yScale;
+		if(getWidth(dst) != dstWidth || getHeight(dst) != dstHeight) {
+			allocate(dst, dstWidth, dstHeight, getCvImageType(src));
+		}
 		Mat srcMat = toCv(src), dstMat = toCv(dst);
 		resize(src, dst, interpolation);
 	}
 	
 	// for contourArea() and arcLength(), see ofPolyline::getArea() and getPerimiter()
 	ofPolyline convexHull(const ofPolyline& polyline);
+	vector<cv::Vec4i> convexityDefects(const vector<cv::Point>& contour);
+	vector<cv::Vec4i> convexityDefects(const ofPolyline& polyline);
 	cv::RotatedRect minAreaRect(const ofPolyline& polyline);
 	cv::RotatedRect fitEllipse(const ofPolyline& polyline);
 	void fitLine(const ofPolyline& polyline, ofVec2f& point, ofVec2f& direction);

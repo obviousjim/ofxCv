@@ -10,9 +10,5 @@ public:
 	void draw();
 	
 	ofVideoGrabber cam;
-	ofImage gray, graySmall;
-	
-	cv::CascadeClassifier classifier;
-	vector<cv::Rect> objects;
-	float scaleFactor;
+	ofxCv::ObjectFinder finder;
 };
