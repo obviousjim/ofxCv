@@ -5,12 +5,14 @@
   <PropertyGroup />
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>..\..\..\addons\ofxCv\libs\CLD\include;..\..\..\addons\ofxCv\libs\opencv\include;..\..\..\addons\ofxCv\libs\ofxCv\include;..\..\..\addons\ofxOpenCv\libs\opencv\include;..\..\..\addons\ofxCv\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\addons\ofxCv\libs\CLD\include\CLD;..\..\..\addons\ofxCv\libs\ofxCv\include;..\..\..\addons\ofxCv\libs\ofxCv\include\ofxCv;..\..\..\addons\ofxOpenCv\libs\opencv\include;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv;..\..\..\addons\ofxCv\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>..\..\..\addons\ofxOpenCv\libs\opencv\lib\vs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <Lib />
+    <Lib />
   </ItemDefinitionGroup>
   <ItemGroup />
 </Project>
