@@ -137,14 +137,7 @@ namespace ofxCv {
 		updateUndistortion();
 		this->ready = true;
 	}
-	void Calibration::reset(){
-		this->ready = false;
-		this->reprojectionError = 0.0;
-		this->imagePoints.clear();
-		this->objectPoints.clear();
-		this->perViewErrors.clear();
-		ready = true;
-	}
+
 	void Calibration::setIntrinsics(Intrinsics& distortedIntrinsics, Mat& distortionCoefficients){
 		this->distortedIntrinsics = distortedIntrinsics;
 		this->distCoeffs = distortionCoefficients;
