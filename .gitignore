@@ -20,5 +20,6 @@ obj/
 bin/
 build/
 !data/
+*/x64/
 
 ofxCv.wiki/
