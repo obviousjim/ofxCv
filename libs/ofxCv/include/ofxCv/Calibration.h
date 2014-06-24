@@ -99,6 +99,7 @@ namespace ofxCv {
 		
 		bool isReady();
 		vector<vector<Point2f> > imagePoints;
+		vector<vector<Point3f> > objectPoints;
 		
 	protected:
 		CalibrationPattern patternType;
@@ -109,7 +110,6 @@ namespace ofxCv {
 		Mat distCoeffs;
 		
 		vector<Mat> boardRotations, boardTranslations;
-		vector<vector<Point3f> > objectPoints;
 		
 		float reprojectionError;
 		vector<float> perViewErrors;
