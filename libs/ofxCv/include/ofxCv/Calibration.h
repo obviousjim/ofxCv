@@ -36,14 +36,14 @@ namespace ofxCv {
 		cv::Point2d getFov() const;
 		double getFocalLength() const;
 		double getAspectRatio() const;
-		Point2d getPrincipalPoint() const;
+		cv::Point2d getPrincipalPoint() const;
 		void loadProjectionMatrix(float nearDist = 10., float farDist = 10000., cv::Point2d viewportOffset = cv::Point2d(0, 0)) const;
 	protected:
 		Mat cameraMatrix;
 		cv::Size imageSize, sensorSize;
 		cv::Point2d fov;
 		double focalLength, aspectRatio;
-		Point2d principalPoint;
+		cv::Point2d principalPoint;
 	};
 	
 	enum CalibrationPattern {CHESSBOARD, CIRCLES_GRID, ASYMMETRIC_CIRCLES_GRID};
@@ -66,7 +66,7 @@ namespace ofxCv {
 		bool clean(float minReprojectionError = 2.f);
 		bool calibrate();
 		bool calibrateFromDirectory(string directory);
-		bool findBoard(Mat img, vector<Point2f> &pointBuf, bool refine = true);
+		bool findBoard(Mat img, vector<cv::Point2f> &pointBuf, bool refine = true);
 		void setIntrinsics(Intrinsics& distortedIntrinsics, Mat& distortionCoefficients);
         
 		void undistort(Mat img, int interpolationMode = INTER_NEAREST);
@@ -90,7 +90,7 @@ namespace ofxCv {
 		int size() const;
 		cv::Size getPatternSize() const;
 		float getSquareSize() const;
-		static vector<Point3f> createObjectPoints(cv::Size patternSize, float squareSize, CalibrationPattern patternType);
+		static vector<cv::Point3f> createObjectPoints(cv::Size patternSize, float squareSize, CalibrationPattern patternType);
 		
 		void customDraw();
 		void draw(int i) const;
@@ -98,8 +98,9 @@ namespace ofxCv {
 		void draw3d(int i) const;
 		
 		bool isReady();
-		vector<vector<Point2f> > imagePoints;
-		
+		vector<vector<cv::Point2f> > imagePoints;
+		vector<vector<cv::Point3f> > objectPoints;
+
 	protected:
 		CalibrationPattern patternType;
 		cv::Size patternSize, addedImageSize, subpixelSize;
@@ -109,7 +110,6 @@ namespace ofxCv {
 		Mat distCoeffs;
 		
 		vector<Mat> boardRotations, boardTranslations;
-		vector<vector<Point3f> > objectPoints;
 		
 		float reprojectionError;
 		vector<float> perViewErrors;

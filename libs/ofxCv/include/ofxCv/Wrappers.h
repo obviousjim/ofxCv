@@ -300,30 +300,30 @@ cv::name(xMat, yMat, resultMat);\
 	
 	// dst does not imitate src
 	template <class S, class D>
-	void warpPerspective(S& src, D& dst, vector<Point2f>& dstPoints, int flags = INTER_LINEAR) {
+	void warpPerspective(S& src, D& dst, vector<cv::Point2f>& dstPoints, int flags = INTER_LINEAR) {
 		Mat srcMat = toCv(src), dstMat = toCv(dst);
 		int w = srcMat.cols;
 		int h = srcMat.rows;
 		vector<Point2f> srcPoints(4);
-		srcPoints[0] = Point2f(0, 0);
-		srcPoints[1] = Point2f(w, 0);
-		srcPoints[2] = Point2f(w, h);
-		srcPoints[3] = Point2f(0, h);
+		srcPoints[0] = cv::Point2f(0, 0);
+		srcPoints[1] = cv::Point2f(w, 0);
+		srcPoints[2] = cv::Point2f(w, h);
+		srcPoints[3] = cv::Point2f(0, h);
 		Mat transform = getPerspectiveTransform(&srcPoints[0], &dstPoints[0]);
 		warpPerspective(srcMat, dstMat, transform, dstMat.size(), flags);
 	}
 	
 	// dst does not imitate src
 	template <class S, class D>
-	void unwarpPerspective(S& src, D& dst, vector<Point2f>& srcPoints, int flags = INTER_LINEAR) {
+	void unwarpPerspective(S& src, D& dst, vector<cv::Point2f>& srcPoints, int flags = INTER_LINEAR) {
 		Mat srcMat = toCv(src), dstMat = toCv(dst);
 		int w = dstMat.cols;
 		int h = dstMat.rows;
 		vector<Point2f> dstPoints(4);
-		dstPoints[0] = Point2f(0, 0);
-		dstPoints[1] = Point2f(w, 0);
-		dstPoints[2] = Point2f(w, h);
-		dstPoints[3] = Point2f(0, h);
+		dstPoints[0] = cv::Point2f(0, 0);
+		dstPoints[1] = cv::Point2f(w, 0);
+		dstPoints[2] = cv::Point2f(w, h);
+		dstPoints[3] = cv::Point2f(0, h);
 		Mat transform = getPerspectiveTransform(&srcPoints[0], &dstPoints[0]);
 		warpPerspective(srcMat, dstMat, transform, dstMat.size(), flags);
 	}
@@ -382,7 +382,7 @@ cv::name(xMat, yMat, resultMat);\
 	void rotate(S& src, D& dst, double angle, ofColor fill = ofColor::black, int interpolation = INTER_LINEAR) {
 		imitate(dst, src);
 		Mat srcMat = toCv(src), dstMat = toCv(dst);
-		Point2f center(srcMat.rows / 2, srcMat.cols / 2);
+		cv::Point2f center(srcMat.rows / 2, srcMat.cols / 2);
 		Mat rotationMatrix = getRotationMatrix2D(center, angle, 1);
 		warpAffine(srcMat, dstMat, rotationMatrix, srcMat.size(), interpolation, BORDER_CONSTANT, toCv(fill));
 	}

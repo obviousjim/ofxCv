@@ -156,8 +156,8 @@ namespace ofxCv {
 		return toCv(img.getPixelsRef());
 	}
 	Mat toCv(ofMesh& mesh);
-	Point2f toCv(ofVec2f vec);
-	Point3f toCv(ofVec3f vec);
+	cv::Point2f toCv(ofVec2f vec);
+	cv::Point3f toCv(ofVec3f vec);
 	cv::Rect toCv(ofRectangle rect);
 	vector<cv::Point2f> toCv(const ofPolyline& polyline);
 	vector<cv::Point2f> toCv(const vector<ofVec2f>& points);
@@ -192,8 +192,8 @@ namespace ofxCv {
 	}
 	
 	// toOf functions
-	ofVec2f toOf(Point2f point);
-	ofVec3f toOf(Point3f point);
+	ofVec2f toOf(cv::Point2f point);
+	ofVec3f toOf(cv::Point3f point);
 	ofRectangle toOf(cv::Rect rect);
 	ofPolyline toOf(cv::RotatedRect rect);
 	template <class T> inline ofPolyline toOf(const vector<cv::Point_<T> >& contour) {
