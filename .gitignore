@@ -25,5 +25,10 @@ obj/
 bin/
 build/
 !data/
+*/x64/
+
+ofxCvLib/Debug/
+ofxCvLib/Release/
 
 ofxCv.wiki/
+
